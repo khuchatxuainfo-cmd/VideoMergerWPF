@@ -1,0 +1,256 @@
+<Window x:Class="VideoMergerWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Video Merger Tool" Height="700" Width="900"
+        Background="#F5F5F5"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/Resources/icon.ico">
+    <Grid>
+        <StackPanel Margin="20" Spacing="15">
+            <!-- Header -->
+            <TextBlock Text="🎬 Video Merger Tool" 
+                       FontSize="28" 
+                       FontWeight="Bold" 
+                       Foreground="#1E88E5"
+                       Margin="0,0,0,10"/>
+            
+            <!-- Section 1: Add Videos -->
+            <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Background="White">
+                <StackPanel>
+                    <TextBlock Text="📁 Chọn File Video" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="Thêm file video để nối" 
+                                   Foreground="#666" 
+                                   VerticalAlignment="Center"/>
+                        
+                        <Button Grid.Column="1" 
+                                Content="Thêm File" 
+                                Padding="12,8" 
+                                Margin="10,0"
+                                Background="#1E88E5" 
+                                Foreground="White"
+                                Click="AddVideoButton_Click"
+                                Cursor="Hand"/>
+                        
+                        <Button Grid.Column="2" 
+                                Content="Thêm Folder" 
+                                Padding="12,8"
+                                Background="#43A047" 
+                                Foreground="White"
+                                Click="AddFolderButton_Click"
+                                Cursor="Hand"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            
+            <!-- Section 2: Video List -->
+            <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Background="White">
+                <StackPanel>
+                    <TextBlock Text="📝 Danh Sách Video" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                    
+                    <ListBox x:Name="VideoListBox" 
+                             Height="200" 
+                             Background="#FAFAFA"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             CornerRadius="4">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="40">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding FileName}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding FilePath}" 
+                                                   FontSize="11" 
+                                                   Foreground="#999"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1" 
+                                                Orientation="Horizontal" 
+                                                VerticalAlignment="Center"
+                                                Spacing="5">
+                                        <Button Content="▲" 
+                                                Padding="6,4"
+                                                FontSize="12"
+                                                Click="MoveUpButton_Click"
+                                                Background="#FFA500"
+                                                Foreground="White"
+                                                Cursor="Hand"/>
+                                        <Button Content="▼" 
+                                                Padding="6,4"
+                                                FontSize="12"
+                                                Click="MoveDownButton_Click"
+                                                Background="#FFA500"
+                                                Foreground="White"
+                                                Cursor="Hand"/>
+                                        <Button Content="✕" 
+                                                Padding="6,4"
+                                                FontSize="12"
+                                                Click="RemoveButton_Click"
+                                                Background="#F44336"
+                                                Foreground="White"
+                                                Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    <TextBlock x:Name="VideoCountLabel" 
+                               Text="0 file được chọn" 
+                               Foreground="#666" 
+                               Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Section 3: Output Settings -->
+            <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Background="White">
+                <StackPanel>
+                    <TextBlock Text="⚙️ Cài Đặt Output" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                    
+                    <Grid RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Output Path -->
+                        <StackPanel>
+                            <TextBlock Text="Đường dẫn Output:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="OutputPathTextBox" 
+                                         Padding="10,8" 
+                                         Background="White"
+                                         BorderBrush="#E0E0E0"
+                                         BorderThickness="1"
+                                         CornerRadius="4"
+                                         Text="output_merged.mp4"/>
+                                <Button Grid.Column="1" 
+                                        Content="Browse" 
+                                        Padding="12,8" 
+                                        Margin="10,0,0,0"
+                                        Background="#607D8B" 
+                                        Foreground="White"
+                                        Click="BrowseOutputButton_Click"
+                                        Cursor="Hand"/>
+                            </Grid>
+                        </StackPanel>
+                        
+                        <!-- Output Format -->
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="Định Dạng Output:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="FormatComboBox" 
+                                      Padding="10,8" 
+                                      Background="White"
+                                      BorderBrush="#E0E0E0"
+                                      BorderThickness="1"
+                                      CornerRadius="4">
+                                <ComboBoxItem IsSelected="True">MP4 (H.264)</ComboBoxItem>
+                                <ComboBoxItem>MKV (Matroska)</ComboBoxItem>
+                                <ComboBoxItem>AVI</ComboBoxItem>
+                                <ComboBoxItem>MOV</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        
+                        <!-- FFmpeg Path -->
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="Đường Dẫn FFmpeg:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="FFmpegPathTextBox" 
+                                         Padding="10,8" 
+                                         Background="White"
+                                         BorderBrush="#E0E0E0"
+                                         BorderThickness="1"
+                                         CornerRadius="4"
+                                         Text="ffmpeg"/>
+                                <Button Grid.Column="1" 
+                                        Content="Test" 
+                                        Padding="12,8" 
+                                        Margin="10,0,0,0"
+                                        Background="#9C27B0" 
+                                        Foreground="White"
+                                        Click="TestFFmpegButton_Click"
+                                        Cursor="Hand"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            
+            <!-- Section 4: Progress -->
+            <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15" Background="White">
+                <StackPanel>
+                    <TextBlock x:Name="StatusLabel" 
+                               Text="Sẵn sàng" 
+                               Foreground="#43A047" 
+                               FontWeight="Bold"
+                               Margin="0,0,0,10"/>
+                    
+                    <ProgressBar x:Name="ProgressBar" 
+                                 Height="8" 
+                                 Background="#E0E0E0"
+                                 Foreground="#1E88E5"
+                                 CornerRadius="4"
+                                 Margin="0,0,0,10"/>
+                    
+                    <TextBlock x:Name="ProgressTextBlock" 
+                               Text="0%" 
+                               Foreground="#666"
+                               TextAlignment="Center"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Section 5: Actions -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <Button Content="🗑️ Xóa Tất Cả" 
+                        Padding="15,12" 
+                        Background="#F44336" 
+                        Foreground="White"
+                        Click="ClearAllButton_Click"
+                        Cursor="Hand"
+                        FontSize="12"
+                        FontWeight="Bold"/>
+                
+                <Button Content="▶️ Bắt Đầu Nối" 
+                        Padding="15,12" 
+                        Background="#4CAF50" 
+                        Foreground="White"
+                        Click="MergeButton_Click"
+                        Cursor="Hand"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Width="200"/>
+                
+                <Button Content="📁 Mở Thư Mục Output" 
+                        Padding="15,12" 
+                        Background="#2196F3" 
+                        Foreground="White"
+                        Click="OpenOutputFolderButton_Click"
+                        Cursor="Hand"
+                        FontSize="12"
+                        FontWeight="Bold"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
