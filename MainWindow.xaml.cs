@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace VideoMergerWPF
 {
@@ -50,7 +52,7 @@ namespace VideoMergerWPF
 
         private void AddFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            var dialog = new FolderBrowserDialog
             {
                 Description = "Chọn Thư Mục Chứa Video"
             };
