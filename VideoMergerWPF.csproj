@@ -8,4 +8,8 @@
     <RootNamespace>VideoMergerWPF</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
 </Project>
